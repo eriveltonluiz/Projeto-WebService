@@ -1,11 +1,16 @@
 package com.project.demo.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Usuario implements Serializable {
@@ -19,6 +24,10 @@ public class Usuario implements Serializable {
 	private String telefone;
 	private String email;
 	private String senha;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
 
 	public Usuario(Long id, String nome, String telefone, String email, String senha) {
 		this.id = id;
@@ -73,6 +82,10 @@ public class Usuario implements Serializable {
 
 	public String getSenha() {
 		return senha;
+	}
+	
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 
 	public void setSenha(String senha) {

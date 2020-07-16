@@ -9,25 +9,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.demo.model.Usuario;
-import com.project.demo.serviço.UsuarioService;
+import com.project.demo.model.Pedido;
+import com.project.demo.serviço.PedidoService;
 
 @RestController
-@RequestMapping(value = "/usuarios")
-public class UsuarioResource {
+@RequestMapping(value = "/pedidos")
+public class PedidoResource {
 	
 	@Autowired
-	private UsuarioService servico;
+	private PedidoService servico;
 	
 	@GetMapping
-	public ResponseEntity<List<Usuario>> findAll(){
-		List<Usuario> list = servico.findAll();
+	public ResponseEntity<List<Pedido>> findAll(){
+		List<Pedido> list = servico.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Usuario> findById(@PathVariable Long id){
-		Usuario obj = servico.findById(id);
+	public ResponseEntity<Pedido> findById(@PathVariable Long id){
+		Pedido obj = servico.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
