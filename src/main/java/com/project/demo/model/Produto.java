@@ -9,10 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,6 +33,9 @@ public class Produto implements Serializable{
 	@JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"),
 	inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private Set<Categoria> categorias = new HashSet<>();
+	
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Produto() {
 	}
@@ -97,6 +99,16 @@ public class Produto implements Serializable{
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
+	}
+	
+	@JsonIgnore
+	public Set<Pedido> getItens() {
+		Set<Pedido> set = new HashSet<Pedido>();
+		
+		for (ItemPedido ip : itens) {
+			set.add(ip.getPedido());
+		}
+		return set;
 	}
 
 	@Override

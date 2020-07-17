@@ -9,11 +9,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.project.demo.model.Categoria;
+import com.project.demo.model.ItemPedido;
+import com.project.demo.model.Pagamento;
 import com.project.demo.model.Pedido;
 import com.project.demo.model.Produto;
 import com.project.demo.model.Usuario;
 import com.project.demo.model.enums.PedidoStatus;
 import com.project.demo.repositories.CategoriaRepository;
+import com.project.demo.repositories.ItemPedidoRepository;
 import com.project.demo.repositories.PedidoRepository;
 import com.project.demo.repositories.ProdutoRepository;
 import com.project.demo.repositories.UsuarioRepository;
@@ -33,6 +36,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -68,6 +74,18 @@ public class TestConfig implements CommandLineRunner {
 		
 		usuarioRepository.saveAll(Arrays.asList(user, user1));
 		pedidoRepository.saveAll(Arrays.asList(o1, o2, o3));
+		
+		ItemPedido oi1 = new ItemPedido(o1, p1, 2, p1.getPreco());
+		ItemPedido oi2 = new ItemPedido(o1, p3, 1, p3.getPreco());
+		ItemPedido oi3 = new ItemPedido(o2, p3, 2, p3.getPreco());
+		ItemPedido oi4 = new ItemPedido(o3, p5, 2, p5.getPreco());
+		
+		itemPedidoRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+		
+		Pagamento pag1 = new Pagamento(null, Instant.parse("2019-06-20T21:53:07Z"), o2);
+		o2.setPagamento(pag1);
+		
+		pedidoRepository.save(o2);
 	}
 
 }

@@ -2,15 +2,21 @@ package com.project.demo.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.demo.model.enums.PedidoStatus;
 
 @Entity
@@ -31,6 +37,13 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "cliente_id")
 	private Usuario cliente;
 
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
+	@JsonIgnore
+	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+	private Pagamento pagamento;
+	
 	public Pedido() {
 	}
 
@@ -39,6 +52,16 @@ public class Pedido implements Serializable {
 		this.momento = momento;
 		this.cliente = cliente;
 		setPedidoStatus(pedidoStatus);
+	}
+	
+	public Double getTotal() {
+		double soma = 0.0;
+		
+		for (ItemPedido ip : itens) {
+			soma += ip.getSubTotal();
+		}
+		
+		return soma;
 	}
 
 	public Long getId() {
@@ -73,6 +96,18 @@ public class Pedido implements Serializable {
 		if(pedidoStatus != null) {
 			this.pedidoStatus = pedidoStatus.getCode();
 		}
+	}
+	
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+	
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
 	}
 	
 	@Override
