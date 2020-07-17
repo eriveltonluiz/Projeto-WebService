@@ -1,4 +1,4 @@
-package com.project.demo.serviço;
+package com.project.demo.services;
 
 import java.util.List;
 import java.util.Optional;
